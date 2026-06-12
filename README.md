@@ -113,21 +113,34 @@ Each experiment writes:
 
 ## Demo
 
-The presentation demo lets you enrol two people and recognise them with /
-without masks in real time.
+The presentation demo enrols any number of people (each `enroll` call
+adds one identity to the gallery) and recognises them with / without
+masks in real time. Two identities below only because we are a
+two-person team -- the matcher stacks all templates into one matrix,
+and the same code path handled 150-identity galleries in Experiment 3.
 
 ```bash
 # Enrol identities. Press SPACE to capture the photo when you look good.
+# Repeat for as many people as you want in the gallery.
 python -m demo.enroll --identity Taha --webcam
 python -m demo.enroll --identity Kutay --webcam
 
-# Run the live demo. ESC or q to quit. `s` to take a screenshot.
+# Run the live demo (multi_max pipeline by default).
+# ESC or q to quit, `s` for a screenshot, `r` to record an MP4.
 python -m demo.webcam_demo --gallery demo_gallery
 ```
 
-The banner above the bounding box shows the routed mode (`full`/`upper`),
-the detected mask state, the top-1 identity, the cosine similarity, and
-the accept/reject decision against the mode-specific threshold.
+Each enrolment stores two templates derived from the same photo: the
+real unmasked embedding and a synthetic-masked one. The demo scores
+every frame against both and takes the max (the `multi_max`
+configuration that won Experiment 3), so a masked probe matches the
+synth-masked row with no mask-classifier routing involved. The banner
+shows the accept/reject decision, top-1 identity, cosine similarity,
+and the mask classifier's call (informational only). Pass
+`--pipeline routing` to see the legacy Pipeline-A behaviour instead.
+
+See `demo/DEMO_SCRIPT.md` for the 30-second recording choreography
+used for the submitted demo video.
 
 ## Project layout
 
