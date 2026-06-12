@@ -1,0 +1,79 @@
+{
+  "data_source": "rmfd",
+  "mask_classifier_backend": "aizoo_caffe",
+  "mask_classifier_accuracy": 0.9589235127478754,
+  "n_gallery": 135,
+  "n_probes": 706,
+  "results": {
+    "naive": {
+      "n_genuine": 482,
+      "n_impostor": 92938,
+      "eer": 0.0979707928249851,
+      "eer_threshold": 0.10876088595390315,
+      "auc": 0.9549440179144101,
+      "rank1": 0.7676348547717843
+    },
+    "oracle": {
+      "n_genuine": 482,
+      "n_impostor": 92938,
+      "eer": 0.09768565649754099,
+      "eer_threshold": 0.13768869209289547,
+      "auc": 0.9564342587201085,
+      "rank1": 0.6846473029045643
+    },
+    "adaptive": {
+      "n_genuine": 482,
+      "n_impostor": 92938,
+      "eer": 0.09620715778126836,
+      "eer_threshold": 0.13461159610748286,
+      "auc": 0.9547984026115122,
+      "rank1": 0.6970954356846473
+    },
+    "fusion_max": {
+      "n_genuine": 482,
+      "n_impostor": 92938,
+      "eer": 0.1347787384066958,
+      "eer_threshold": 0.20818857198953628,
+      "auc": 0.9344569850654016,
+      "rank1": 0.5518672199170125
+    },
+    "fusion_avg": {
+      "n_genuine": 482,
+      "n_impostor": 92938,
+      "eer": 0.10804787182888803,
+      "eer_threshold": 0.14979972100257877,
+      "auc": 0.9494574596601186,
+      "rank1": 0.6929460580912863
+    },
+    "fusion_weighted": {
+      "n_genuine": 482,
+      "n_impostor": 92938,
+      "eer": 0.09977208738364728,
+      "eer_threshold": 0.13979411342144005,
+      "auc": 0.9545967556651562,
+      "rank1": 0.7053941908713693
+    },
+    "multi_max": {
+      "n_genuine": 482,
+      "n_impostor": 92938,
+      "eer": 0.09100672924411571,
+      "eer_threshold": 0.13208383589982986,
+      "auc": 0.9570039956142626,
+      "rank1": 0.7738589211618258
+    },
+    "multi_adaptive": {
+      "n_genuine": 482,
+      "n_impostor": 92938,
+      "eer": 0.0872158425520641,
+      "eer_threshold": 0.12175738048553464,
+      "auc": 0.957073052940572,
+      "rank1": 0.7614107883817427
+    }
+  },
+  "args": {
+    "source": "rmfd",
+    "n_identities": 150,
+    "n_impostors": 80,
+    "seed": 42
+  }
+}

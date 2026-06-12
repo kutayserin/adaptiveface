@@ -1,0 +1,23 @@
+numpy>=1.24,<2.0
+# Pin below 4.11: newer wheels force numpy 2.x which breaks the rest of
+# this stack. ALSO: if `opencv-python-headless` ever appears alongside
+# this package (some deps pull it in), it shadows the GUI build and
+# cv2.imshow dies with "The function is not implemented". Fix:
+#   pip uninstall -y opencv-python opencv-python-headless
+#   pip install "opencv-python==4.10.0.84"
+opencv-python>=4.8.0,<4.11
+scikit-learn>=1.3.0
+scipy>=1.11.0
+matplotlib>=3.7.0
+pandas>=2.0.0
+tqdm>=4.66.0
+Pillow>=10.0.0
+insightface>=0.7.3
+# CPU build avoids the CUDA/cuDNN DLL hell on Windows. ArcFace inference
+# is fast enough on CPU for our experiment scale (~13K LFW images in a
+# few minutes). If you have a working CUDA + cuDNN install you can swap
+# in `onnxruntime-gpu` -- the FaceDetector wrapper auto-detects providers.
+onnxruntime>=1.16.0
+torch>=2.1.0
+torchvision>=0.16.0
+requests>=2.31.0

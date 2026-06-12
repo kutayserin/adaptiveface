@@ -1,0 +1,22 @@
+{
+  "backend": "aizoo_caffe",
+  "source": "rmfd",
+  "accuracy": 0.94,
+  "auc": 0.9914777777777778,
+  "confusion_matrix": [
+    [
+      299,
+      1
+    ],
+    [
+      35,
+      265
+    ]
+  ],
+  "classification_report": "              precision    recall  f1-score   support\n\n    unmasked       0.90      1.00      0.94       300\n      masked       1.00      0.88      0.94       300\n\n    accuracy                           0.94       600\n   macro avg       0.95      0.94      0.94       600\nweighted avg       0.95      0.94      0.94       600\n",
+  "args": {
+    "samples_per_class": 300,
+    "seed": 42,
+    "use_synth_fallback": false
+  }
+}

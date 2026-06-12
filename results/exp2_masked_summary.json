@@ -1,0 +1,28 @@
+{
+  "data_source": "rmfd",
+  "n_gallery": 200,
+  "n_probes": 680,
+  "results": {
+    "full": {
+      "n_genuine": 641,
+      "n_impostor": 126227,
+      "eer": 0.15484118964685703,
+      "eer_threshold": 0.08600111812353134,
+      "auc": 0.9084660047179692,
+      "rank1": 0.5460218408736349
+    },
+    "upper": {
+      "n_genuine": 641,
+      "n_impostor": 126227,
+      "eer": 0.20877683689663573,
+      "eer_threshold": 0.12620863652229314,
+      "auc": 0.8660966047758819,
+      "rank1": 0.3244929797191888
+    }
+  },
+  "args": {
+    "source": "rmfd",
+    "n_identities": 200,
+    "seed": 42
+  }
+}

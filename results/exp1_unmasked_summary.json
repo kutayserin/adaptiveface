@@ -1,0 +1,17 @@
+{
+  "n_gallery": 199,
+  "n_genuine_probes": 751,
+  "n_impostor_probes": 300,
+  "n_genuine": 750,
+  "n_impostor": 208399,
+  "eer": 0.053257485240652144,
+  "eer_threshold": 0.09912924230098724,
+  "auc": 0.9846488066961293,
+  "rank1": 0.9266666666666666,
+  "args": {
+    "n_identities": 200,
+    "n_impostor_identities": 150,
+    "probes_per_impostor": 2,
+    "seed": 42
+  }
+}

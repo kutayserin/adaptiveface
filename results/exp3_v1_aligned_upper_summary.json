@@ -1,0 +1,63 @@
+{
+  "data_source": "rmfd",
+  "mask_classifier_backend": "aizoo_caffe",
+  "mask_classifier_accuracy": 0.9589235127478754,
+  "n_gallery": 145,
+  "n_probes": 706,
+  "results": {
+    "naive": {
+      "n_genuine": 519,
+      "n_impostor": 99821,
+      "eer": 0.10037133134978277,
+      "eer_threshold": 0.10776115560531613,
+      "auc": 0.9499690959341306,
+      "rank1": 0.7649325626204239
+    },
+    "oracle": {
+      "n_genuine": 519,
+      "n_impostor": 99821,
+      "eer": 0.10169035907607951,
+      "eer_threshold": 0.1356372947692871,
+      "auc": 0.9517509559838507,
+      "rank1": 0.6724470134874759
+    },
+    "adaptive": {
+      "n_genuine": 519,
+      "n_impostor": 99821,
+      "eer": 0.09827090491980646,
+      "eer_threshold": 0.13358589744567867,
+      "auc": 0.9492456815619034,
+      "rank1": 0.6897880539499036
+    },
+    "fusion_max": {
+      "n_genuine": 519,
+      "n_impostor": 99821,
+      "eer": 0.13801705052043156,
+      "eer_threshold": 0.20724087083339693,
+      "auc": 0.9296137581453847,
+      "rank1": 0.5375722543352601
+    },
+    "fusion_avg": {
+      "n_genuine": 519,
+      "n_impostor": 99821,
+      "eer": 0.11215241949756732,
+      "eer_threshold": 0.14788992404937745,
+      "auc": 0.9444465516202711,
+      "rank1": 0.6820809248554913
+    },
+    "fusion_weighted": {
+      "n_genuine": 519,
+      "n_impostor": 99821,
+      "eer": 0.10205601359767316,
+      "eer_threshold": 0.1388212821960449,
+      "auc": 0.9490998038705082,
+      "rank1": 0.6897880539499036
+    }
+  },
+  "args": {
+    "source": "rmfd",
+    "n_identities": 150,
+    "n_impostors": 80,
+    "seed": 42
+  }
+}
