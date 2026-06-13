@@ -48,11 +48,26 @@ mask. Three families of mitigations exist in the literature:
    unmasked datasets (helps if the synthetic distribution matches reality).
 
 We pursue a fourth, deployment-oriented direction: keep the off-the-shelf
-ArcFace recognition model and use *upper-face-only* embeddings as a
-fallback branch. The novelty is in the **dual-template enrollment** and
-the **mask-aware routing**: each enrolled identity is represented twice
-in the gallery -- once with the full-face embedding and once with the
-upper-face embedding -- both computed from the same enrollment photo.
+ArcFace recognition model unchanged and absorb the mask condition at the
+*gallery* level instead. We build and compare two such pipelines, both of
+which represent each enrolled identity by two templates derived from a
+single enrollment photo:
+
+1. **Mask-aware routing (Pipeline A)** -- a full-face template and an
+   *upper-face-only* template; a mask detector selects which one to score
+   each probe against.
+2. **Multi-template enrollment (Pipeline B)** -- a full-face template from
+   the real photo and a second full-face template from a *synthetic-masked*
+   rendering of the same photo; matching takes the max similarity over
+   both, with no detector needed at match time.
+
+Our central, somewhat counter-intuitive finding is that **routing fails**:
+on a strong pre-trained ArcFace it underperforms the naive full-face
+baseline, because the model already mines useful identity signal from the
+visible upper face and our upper-fill branch erases it. **Multi-template
+enrollment, in contrast, beats the baseline on every metric.** Reporting
+both — including why the appealing routing idea does not work — is the
+scientific contribution of this project.
 
 ## 2. Related work
 
@@ -245,6 +260,8 @@ identity. Gallery size after detection failures: 199 templates.
 | EER threshold (cosine) | 0.099 |
 | ROC AUC | 0.985 |
 
+![Figure 1: FAR and FRR swept across the cosine threshold (with sigmoid fits) on the unmasked LFW baseline. The curves cross at EER = 5.3 % near t = 0.099.](figures/exp1/far_frr.png)
+
 **Discussion.** The pre-trained ArcFace backbone (InsightFace
 ``buffalo_l``) is healthy on the LFW protocol -- our numbers are in
 the same ballpark as Smart Peephole's LFW evaluation (which reported
@@ -270,6 +287,8 @@ We compare two operating modes on the same probe set:
 | ``full`` (naive) | **54.6 %** | **15.5 %** | 0.908 |
 | ``upper`` (aligned fill) | 32.4 % | 20.9 % | 0.866 |
 
+![Figure 2: ROC for the naive full-face embedder on real masked RMFD probes (AUC 0.908). Even feeding the masked image unchanged into ArcFace clearly beats the upper-fill branch.](figures/exp2/roc_full.png)
+
 **Discussion.** A pure mask **does** noticeably hurt ArcFace: rank-1
 drops from 92.7 % (Exp 1, unmasked) to 54.6 % (Exp 2, masked), a 38
 percentage-point gap that is the headroom any mitigation must close.
@@ -280,10 +299,11 @@ proposes the alternative mitigation that actually works.
 
 ### 5.3 Experiment 3 -- Cross-mode end-to-end (headline)
 
-**Setup.** 150 enrolled identities + 80 impostor identities from LFW
-+ paired RMFD probes. Each enrolled identity provides one unmasked
-gallery photo. Probes mix genuine unmasked, genuine masked, and
-impostor probes. Six configurations:
+**Setup.** 150 sampled identities (135 enrolled after detection
+failures) + 80 impostor identities from LFW + paired RMFD probes.
+Each enrolled identity provides one unmasked gallery photo. Probes mix genuine unmasked, genuine masked, and
+impostor probes. Eight configurations (three of them score-fusion
+variants):
 
 * **naive** -- always score against ``gallery_full``.
 * **oracle** -- routing on ground-truth mask label.
@@ -307,6 +327,10 @@ impostors. AIZOO mask classifier accuracy on this probe set: 95.9 %.
 | fusion_weighted | 70.5 % | 10.0 % | 0.955 | 41.1 % |
 | **multi_max** | **77.4 %** | **9.1 %** | **0.957** | **52.7 %** |
 | **multi_adaptive** | 76.1 % | **8.7 %** | **0.957** | 50.6 % |
+
+![Figure 3: Overall rank-1 identification rate per configuration (RMFD genuine + LFW impostors). The two multi-template configurations (green) are the only ones that match or beat the naive baseline; every routing/fusion variant falls below it.](figures/exp3/exp3_rank1_bar.png)
+
+![Figure 4: Equal Error Rate per configuration (lower is better). multi_max and multi_adaptive achieve the lowest EER; fusion_max is the clear worst.](figures/exp3/exp3_eer_bar.png)
 
 **Discussion -- the routing approach fails.** Every routing-based
 configuration (oracle, adaptive, weighted fusion) is **worse than
@@ -359,6 +383,8 @@ Confusion matrix (rows: truth, columns: prediction):
 | unmasked | 299 | 1 |
 | masked   |  35 | 265 |
 
+![Figure 5: ROC for the AIZOO mask classifier on the balanced RMFD set (AUC 0.991). The detector is near-perfect, ruling out classifier quality as the reason routing fails.](figures/exp4/roc.png)
+
 **Discussion.** The mask classifier is solid on RMFD -- almost
 perfect on the unmasked class and 88 % recall on masked. Combined
 with Experiment 3, this confirms that the failure of the routing
@@ -370,10 +396,16 @@ is high-fidelity, the target it routes to is the problem.
 `python -m demo.webcam_demo --gallery demo_gallery`
 
 After enrolling each team member from an unmasked webcam capture, the
-demo runs at interactive frame rates on a single CUDA GPU. The on-screen
-banner reflects the routed mode, the mask probability, the top-1
-identity, and the accept/reject decision. Putting on or removing a mask
-flips the routing live; a stranger appearing on camera triggers a reject.
+demo runs at interactive frame rates on a single CUDA GPU. By default it
+runs **Pipeline B (`multi_max`)** -- the winning configuration -- scoring
+each frame against both the real and synthetic-masked gallery rows and
+taking the max; no mask classifier is consulted at match time (the
+banner still shows its call for information only). The on-screen banner
+reflects the top-1 identity, the cosine similarity, the active mode, and
+the accept/reject decision. Putting on or removing a mask keeps the same
+identity accepted via the synthetic-masked row; a stranger appearing on
+camera triggers a reject. The legacy routing pipeline is still available
+via `--pipeline routing` for comparison.
 
 ## 7. Discussion
 

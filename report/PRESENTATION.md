@@ -115,9 +115,9 @@ Show all 8 configurations:
 
 1. **Routing-based mitigation doesn't work** — oracle and adaptive
    are *worse* than naive. Surprising? Not when you realise the mask
-   classifier hits 95.9 % accuracy on this probe set (Experiment 4) —
-   the routing *decision* is correct; the destination it routes to
-   is the problem.
+   classifier hits 95.9 % accuracy on this cross-mode probe set (and
+   94 % on the balanced set in Experiment 4) — the routing *decision*
+   is correct; the destination it routes to is the problem.
 
 2. **Score-level fusion doesn't help either** — full + upper aren't
    making independent errors, so fusion isn't averaging out noise.
