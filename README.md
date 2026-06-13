@@ -61,13 +61,19 @@ you instantiate `FaceDetector`. That download is ~250 MB and goes into
 
 ### RMFD (manual)
 
-RMFD does not have a stable open mirror. To use it:
+RMFD (Wang et al., 2020) is the Real-World Masked Face Dataset from
+Wuhan University. The original repository
+(<https://github.com/X-zhangyang/Real-World-Masked-Face-Dataset>) links
+to a Baidu Pan download that requires a Baidu account and is
+geo-restricted, so we obtained the data from a Kaggle mirror:
 
-1. Visit <https://github.com/X-zhangyang/Real-World-Masked-Face-Dataset> and
-   follow their instructions (one of the most reliable mirrors at the time
-   of writing is on Baidu Pan; access varies).
-2. Extract `AFDB_masked_face_dataset/` and `AFDB_face_dataset/` into
-   `adaptiveface/data/rmfd/` so the tree looks like:
+1. Download **`muhammeddalkran/masked-facerecognition`** from Kaggle:
+   <https://www.kaggle.com/datasets/muhammeddalkran/masked-facerecognition>
+   (either the website "Download" button, or
+   `kaggle datasets download -d muhammeddalkran/masked-facerecognition`
+   with the Kaggle CLI). It preserves the original AFDB folder layout.
+2. Extract so that `AFDB_masked_face_dataset/` and `AFDB_face_dataset/`
+   land directly under `adaptiveface/data/rmfd/`:
    ```
    data/rmfd/
      AFDB_masked_face_dataset/
@@ -77,7 +83,11 @@ RMFD does not have a stable open mirror. To use it:
        <identity_1>/*.jpg
        ...
    ```
-3. Verify with `python -m scripts.download_datasets --rmfd`.
+   The Kaggle archive nests these one level deeper
+   (`AFDB_face_dataset/AFDB_face_dataset/...`); flatten it so the
+   identity folders sit directly inside each `AFDB_*` directory.
+3. Verify with `python -m scripts.download_datasets --rmfd`. You should
+   see ~460 unmasked and ~378 masked identities, 377 shared.
 
 If RMFD is unavailable, every experiment that needs masked images can fall
 back to **synthetic masks** overlaid on LFW. The fallback is automatic when
@@ -202,5 +212,8 @@ Edit `src/config.py` to change defaults:
 * RetinaFace + ArcFace: <https://github.com/deepinsight/insightface>
 * AIZOO FaceMaskDetection: <https://github.com/AIZOOTech/FaceMaskDetection>
 * LFW: Huang et al., Univ. of Massachusetts Amherst.
-* RMFD: <https://github.com/X-zhangyang/Real-World-Masked-Face-Dataset>
+* RMFD (Wang et al., 2020): original
+  <https://github.com/X-zhangyang/Real-World-Masked-Face-Dataset>;
+  obtained via Kaggle mirror
+  <https://www.kaggle.com/datasets/muhammeddalkran/masked-facerecognition>
 * MFR2: <https://github.com/aqeelanwar/MaskTheFace>
